@@ -151,7 +151,10 @@ if [ $COMMAND = "download" ]; then
     echo "Downloading..."
 
     release_id=$(curl -s $LIBPOSTAL_RELEASE_API_URL/tags/$LIBPOSTAL_RELEASE_VERSION_STRING | grep "\"id\"" | head -n1 | grep -o '[0-9][0-9]*')
+    echo "relid:" $release_id
+
     release_assets="$(curl -s $LIBPOSTAL_RELEASE_API_URL/$release_id/assets)"
+    echo "relassets:" $release_assets
 
     asset_names_tempfile="$LIBPOSTAL_DATA_DIR/asset_names.tmp"
     echo "$release_assets" | grep -o '"name": *"[^"]*"' | grep -o '"[^"]*"$' | tr -d '"' > $asset_names_tempfile
@@ -166,6 +169,8 @@ if [ $COMMAND = "download" ]; then
     paste -d' ' $asset_names_tempfile $asset_metadata_tempfile $asset_urls_tempfile $asset_sizes_tempfile > $assets_tempfile
 
     rm $asset_names_tempfile $asset_metadata_tempfile $asset_urls_tempfile $asset_sizes_tempfile
+
+    echo "while ..."
 
     while read -r line; do
         asset=$(echo "$line" | cut -f1 -d' ')
