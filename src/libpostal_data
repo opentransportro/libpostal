@@ -163,8 +163,9 @@ if [ $COMMAND = "download" ]; then
         rm -f $LIBPOSTAL_LANG_CLASS_UPDATED_PATH
         rm -f $LIBPOSTAL_PARSER_UPDATED_PATH
     fi
-    set -e
     mkdir -p $LIBPOSTAL_DATA_DIR
+    set -e
+    echo "Downloading..."
 
     release_id=$(curl -s $LIBPOSTAL_RELEASE_API_URL/tags/$LIBPOSTAL_RELEASE_VERSION_STRING | grep "\"id\"" | head -n1 | grep -o '[0-9][0-9]*')
     release_assets="$(curl -s $LIBPOSTAL_RELEASE_API_URL/$release_id/assets)"
