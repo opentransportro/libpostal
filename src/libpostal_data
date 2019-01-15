@@ -148,7 +148,8 @@ if [ $COMMAND = "download" ]; then
         LIBPOSTAL_DATA_DIR_VERSION=$(cat $LIBPOSTAL_DATA_VERSION_FILE)
     fi
     mkdir -p $LIBPOSTAL_DATA_DIR
-    echo "Downloading..."
+    echo "Downloading from $LIBPOSTAL_RELEASE_API_URL/tags/$LIBPOSTAL_RELEASE_VERSION_STRING"
+    curl -s $LIBPOSTAL_RELEASE_API_URL/tags/$LIBPOSTAL_RELEASE_VERSION_STRING
 
     release_id=$(curl -s $LIBPOSTAL_RELEASE_API_URL/tags/$LIBPOSTAL_RELEASE_VERSION_STRING | grep "\"id\"" | head -n1 | grep -o '[0-9][0-9]*')
     echo "relid:" $release_id
