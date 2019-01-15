@@ -147,7 +147,7 @@ if [ $COMMAND = "download" ]; then
     if [ -e $LIBPOSTAL_DATA_VERSION_FILE ]; then
         LIBPOSTAL_DATA_DIR_VERSION=$(cat $LIBPOSTAL_DATA_VERSION_FILE)
     fi
-
+    set +e
     if [ "$LIBPOSTAL_DATA_DIR_VERSION" != "$LIBPOSTAL_VERSION_STRING" ]; then
         echo "Old version of datadir detected, removing..."
         for subdir in $BASIC_MODULE_DIRS $PARSER_MODULE_DIR $LANGUAGE_CLASSIFIER_MODULE_DIR; do
@@ -163,7 +163,7 @@ if [ $COMMAND = "download" ]; then
         rm -f $LIBPOSTAL_LANG_CLASS_UPDATED_PATH
         rm -f $LIBPOSTAL_PARSER_UPDATED_PATH
     fi
-
+    set -e
     mkdir -p $LIBPOSTAL_DATA_DIR
 
     release_id=$(curl -s $LIBPOSTAL_RELEASE_API_URL/tags/$LIBPOSTAL_RELEASE_VERSION_STRING | grep "\"id\"" | head -n1 | grep -o '[0-9][0-9]*')
