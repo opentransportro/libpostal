@@ -150,12 +150,14 @@ if [ $COMMAND = "download" ]; then
     mkdir -p $LIBPOSTAL_DATA_DIR
     echo "Downloading from $LIBPOSTAL_RELEASE_API_URL/tags/$LIBPOSTAL_RELEASE_VERSION_STRING"
     curl -s $LIBPOSTAL_RELEASE_API_URL/tags/$LIBPOSTAL_RELEASE_VERSION_STRING
+    #Disable dynamic datafetch
+    #release_id=$(curl -s $LIBPOSTAL_RELEASE_API_URL/tags/$LIBPOSTAL_RELEASE_VERSION_STRING | grep "\"id\"" | head -n1 | grep -o '[0-9][0-9]*')
+    release_id=$(cat dataspec.json | grep "\"id\"" | head -n1 | grep -o '[0-9][0-9]*')
+    echo "release id:" $release_id
 
-    release_id=$(curl -s $LIBPOSTAL_RELEASE_API_URL/tags/$LIBPOSTAL_RELEASE_VERSION_STRING | grep "\"id\"" | head -n1 | grep -o '[0-9][0-9]*')
-    echo "relid:" $release_id
-
-    release_assets="$(curl -s $LIBPOSTAL_RELEASE_API_URL/$release_id/assets)"
-    echo "relassets:" $release_assets
+    #release_assets="$(curl -s $LIBPOSTAL_RELEASE_API_URL/$release_id/assets)"
+    release_assets="$(cat assets.json)"
+    echo "release assets:" $release_assets
 
     asset_names_tempfile="$LIBPOSTAL_DATA_DIR/asset_names.tmp"
     echo "$release_assets" | grep -o '"name": *"[^"]*"' | grep -o '"[^"]*"$' | tr -d '"' > $asset_names_tempfile
