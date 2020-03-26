@@ -6,10 +6,16 @@ RUN apt-get install -y --no-install-recommends git curl make libsnappy-dev autoc
 
 RUN mkdir -p /mnt/data
 
-RUN git clone --single-branch https://github.com/opentransportro/libpostal \
-  && cd libpostal \
-  && ./bootstrap.sh \
+# Where the app is built and run inside the docker fs
+ENV LIBPOSTAL=/opt/libpostal
+
+WORKDIR ${LIBPOSTAL}
+ADD . ${LIBPOSTAL}
+
+RUN ./bootstrap.sh \
   && ./configure --datadir=/mnt/data \
   && make -j4 \
   && make install \
   && ldconfig
+
+RUN rm -rf ${LIBPOSTAL}
